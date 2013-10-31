@@ -1,0 +1,44 @@
+*   137478e : Success for gameSetup
+|\  
+| * 5129e4a : got test accusation test to pass
+* | 4533153 : Everything minus testAccusations is success
+* | 7582e6f : TestLoadPlayers = success, TestLoadCards = success, the rest fail
+* |   e14c742 : pulled nhan's stuff and merge with tempBranch
+|\ \  
+| |/  
+|/|   
+| * dd52138 : Got testLoadPlayers to pass, currently working on testLoadCards
+* | 865868f : Adding CardTypes.txt and loadCardTypes method and trying to make test accusation test pass.  getting close though
+|/  
+* 30d151f : testLoadPlayers works minus the comparable for players.contains
+* 48c2cf1 : Started loading the files, some errors with testLoadPlayers()
+*   dbd7b42 : Failing Tests Finished
+|\  
+| * 33e62a0 :  pulling
+* | 35b716f : Failing tests finished with Accusations included
+* | 93222b6 : Wrote Failing Tests that are in GameSetupTests
+* |   0970ce9 : Merge https://github.com/chaseonbass/CluePlayers
+|\ \  
+| |/  
+| * 363b0d9 : updating the rest of the stub from hub
+* |   6151a18 : Started Tests, Grabbing Stubs for Player and CompPlayer Classes
+|\ \  
+| |/  
+|/|   
+| *   4aa54cf : Updating my files
+| |\  
+| | * 97c0099 : Altered some comments, deleted and modified, and deleted some 'main' methods
+| | * 96be22e : Refactored some comments, took out a couple main methods
+| * | 6539b75 : Pulling from hub
+* | | 679c78b : Created Stubs for ClueGame, Player, and Solution
+* | | a2c6a19 : About to push completed Card class
+| |/  
+|/|   
+* |   bd4edb2 : Split LoadConfig into board and room config
+|\ \  
+| |/  
+| * 97b800c : Changing more variable names
+| * aef7117 : Changing c to column and r to row
+* | a58f8d3 : Split up loadConfig into Board and Room Configs
+|/  
+* e3a0376 : Initial Commit yet again

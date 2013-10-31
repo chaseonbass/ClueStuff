@@ -1,0 +1,21 @@
+Batman, PLAYER
+Joker, PLAYER
+Arnold, PLAYER
+TwoFace, PLAYER
+Ivy, PLAYER
+Penguin, PLAYER
+Conservatory, ROOM
+Kitchen, ROOM
+Ballroom, ROOM
+Billiard room, ROOM
+Library, ROOM
+Study, ROOM
+Dining room, ROOM
+Lounge, ROOM
+Hall, ROOM
+Batarang, WEAPON
+Rotary Saw, WEAPON
+Napalm, WEAPON
+Kitten, WEAPON
+Pikachu, WEAPON
+The Force, WEAPON

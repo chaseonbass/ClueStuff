@@ -1,0 +1,6 @@
+Batman, Black, 6, 3
+Joker, Green, 15, 1
+Arnold, Blue, 17, 14
+TwoFace, Pink, 12, 0
+Ivy, Red, 21, 6
+Penguin, White, 8, 0
