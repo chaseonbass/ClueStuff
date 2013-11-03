@@ -67,7 +67,7 @@ public class Board extends JPanel {
 
 	}
 	
-	public void loadRoomConfig()throws BadConfigFormatException {
+	public void loadRoomConfig() throws BadConfigFormatException {
 		rooms = new HashMap<Character, String>();
 		cells = new ArrayList<BoardCell>();
 		try{
