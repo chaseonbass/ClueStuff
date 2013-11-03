@@ -27,7 +27,7 @@ public class Board extends JPanel {
 	private int numColumns;
 	private String layout, legend;
 	private Map<Character, String> rooms; // from legend
-	private static final int BLOCKSIZE = 30;
+	private static final int BLOCKSIZE = 20;
 	
 	// ------------------------------------------------------------------
 	
