@@ -1,11 +1,15 @@
 package clueGame;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Scanner;
@@ -20,7 +24,7 @@ import cluePlayer.*;
  *  Purpose:
  */
 
-public class Board extends JPanel {
+public class Board extends JPanel implements MouseListener {
 
 	private ArrayList<BoardCell> cells; // Not yet implemented
 	private int numRows;
@@ -64,6 +68,7 @@ public class Board extends JPanel {
 		this.layout = layout;
 		this.legend = legend;
 		this.game = game;
+		addMouseListener(this);
 
 	}
 	
@@ -351,6 +356,15 @@ public class Board extends JPanel {
 		// returns the adjacency list for one cell
 		return adjMap.get(index);
 	}
+	public void highlightTargets(Graphics g){
+		ArrayList <BoardCell> targs = new ArrayList<BoardCell>();
+		targs.addAll(targets);
+		for(int i = 0; i < targs.size(); i++){
+			Color c = new Color(150,150,0);
+			g.setColor(c);
+			targs.get(i).draw(g, this);
+		}
+	}
 	
 	// Helper function
 	public Point indexToCoord(int index) {
@@ -389,4 +403,50 @@ public class Board extends JPanel {
 	}
 	
 	// -----------------------------------------------------------------
+	// Mouse Listener-------------------------------
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		System.out.println("MousePressed!---------------------------");
+		boolean valid = false;
+		ArrayList <BoardCell> targs = new ArrayList <BoardCell>();
+		targs.addAll(targets);
+		BoardCell clicked = new Walkway(0,0);
+		for(int i = 0; i < targs.size(); i++){
+			if(targs.get(i).containsClick(e.getX(), e.getY(), game.board)){
+				valid = true;
+				clicked = targs.get(i);
+			}
+		}
+		if(valid){
+			game.getCurrentPlayer().setColumn(clicked.getCol());
+			game.getCurrentPlayer().setRow(clicked.getRow());
+			repaint();
+		}
+		else{
+			// tell player that target is invalid
+			System.out.println("target is invalid");
+		}
+		
+	}
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -93,6 +93,14 @@ public class ComputerPlayer extends Player{
 		Suggestion guess = new Suggestion(pName, wName, rCard.getName());
 		return guess;
 	}
+	public void makeMove(){
+		BoardCell chosen = pickLocation(board.getTargets());
+		setColumn(chosen.getCol());
+		setRow(chosen.getRow());
+		board.repaint();
+		
+		// space for handling suggestions..
+	}
 	public void draw(Graphics g, Board b){
 		super.draw(g, b);
 	}

@@ -28,7 +28,7 @@ public class ClueGame_ControlGUI extends JPanel{
 	public Component createSouthLayout(){
 		JPanel panel= new JPanel();
 		panel.setLayout(new GridLayout(3,1));
-		DiePanel dPanel= new DiePanel();
+		DiePanel dPanel= new DiePanel(cg.getRoll());
 		panel.add(dPanel);
 		GuessPanel gPanel= new GuessPanel();
 		panel.add(gPanel);
@@ -38,10 +38,7 @@ public class ClueGame_ControlGUI extends JPanel{
 	}
 	public ClueGame_ControlGUI(ClueGame cg){
 		this.cg = cg;
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//setTitle ("Clue Game Control GUI");
-		//setSize (700,200);
-		
+
 		setLayout(new GridLayout(2,3));
 		
 		whoseTurnPanel wtPanel= new whoseTurnPanel(cg.getCurrentPlayer().getName());
@@ -51,7 +48,7 @@ public class ClueGame_ControlGUI extends JPanel{
 		nextPlayerButton.addActionListener(new ButtonListener());
 		JButton accusationButton = new JButton("Make Accusation");
 		accusationButton.addActionListener(new ButtonListener());
-		DiePanel dPanel= new DiePanel();
+		DiePanel dPanel= new DiePanel(cg.getRoll());
 		GuessPanel gPanel= new GuessPanel();
 		GuessResultPanel gResult= new GuessResultPanel();
 		
@@ -73,7 +70,9 @@ public class ClueGame_ControlGUI extends JPanel{
 	{
 		public void actionPerformed(ActionEvent e)
 		{
+			cg.move();
 			System.out.println("Button pressed");
+			
 		}
 	}
 	/*public static void main(String[] args) {

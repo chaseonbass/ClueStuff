@@ -10,6 +10,10 @@ public class HumanPlayer extends Player {
 		super(name, color, row, column, board);
 		// TODO Auto-generated constructor stub
 	}
+	public void makeMove(){
+		//highlight targets
+		
+	}
 	public void draw(Graphics g, Board b){
 		super.draw(g, b);
 	}
