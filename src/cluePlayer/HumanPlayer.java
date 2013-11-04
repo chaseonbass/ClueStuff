@@ -12,7 +12,7 @@ public class HumanPlayer extends Player {
 	}
 	public void makeMove(){
 		//highlight targets
-		
+		//allow human to make suggestions
 	}
 	public void draw(Graphics g, Board b){
 		super.draw(g, b);

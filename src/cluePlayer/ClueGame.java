@@ -86,7 +86,7 @@ public class ClueGame extends JFrame {
 		board.calcAdjacencies();
 		loadConfigFiles(legendFile, weaponFile, peopleFile);
 		deal();
-		currentPlayer = players.get("Batman");
+		currentPlayer = players.get("Arnold");
 		pickNextPlayer(currentPlayer);
 		roll();
 		
@@ -330,7 +330,9 @@ public class ClueGame extends JFrame {
 			if(currentPlayer.getName().equals(hplayer.getName())){
 				if(currentPlayer.getMustFinish()){
 					//tell player to pick a target
-					move();
+				}
+				else{
+					currentPlayer.setMustFinish(true);
 				}
 			}
 			else{
@@ -341,7 +343,7 @@ public class ClueGame extends JFrame {
 				board.calcTargets(currentPlayer.getIndex(), roll);
 				// make board show targets
 				if(currentPlayer.getName().equals(hplayer.getName())){
-					
+					((HumanPlayer) currentPlayer).makeMove();
 				}
 				else{
 					// computer player pick and move to target
