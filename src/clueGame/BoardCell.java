@@ -1,5 +1,6 @@
 package clueGame;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -27,6 +28,8 @@ public abstract class BoardCell {
 			return false;
 		return true;
 	}
+	// verifies if the boardcell was clicked
+	
 	public boolean containsClick(int mouseX, int mouseY, Board b) {
 		
 		Rectangle rect = new Rectangle(col*b.getBlockSize(), row*b.getBlockSize() , b.getBlockSize(), b.getBlockSize());
@@ -39,9 +42,16 @@ public abstract class BoardCell {
 	// These are used later for draw()
 	protected int row;
 	protected int col;
+	protected Color cellColor;
 	public abstract void draw(Graphics g, Board b);
 	public int getRow(){
 		return row;
+	}
+	public void highlight(){  // used for highlighting targets.
+		cellColor = new Color(0,100,0);
+	}
+	public void clearHighlights(){  // used to get rid of highlights
+		cellColor = new Color(100,200,250);
 	}
 	public int getCol(){
 		return col;

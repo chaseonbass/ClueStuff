@@ -109,28 +109,28 @@ public class RoomCell extends BoardCell {
 
 	@Override
 	public void draw(Graphics g, Board b) {
-		Color c = new Color(100,100,250);
+		Color doorColor = new Color(100,0,250);
 		if(isDoorway()){
 			if(doorDirection == DoorDirection.DOWN){
-				g.setColor(c);
+				g.setColor(doorColor);
 				g.fillRect(col*b.getBlockSize(), row*b.getBlockSize()+b.getBlockSize()-doorWayLineThickness, b.getBlockSize(), doorWayLineThickness);
 			}
 			else if(doorDirection == DoorDirection.UP){
-				g.setColor(c);
+				g.setColor(doorColor);
 				g.fillRect(col*b.getBlockSize(), row*b.getBlockSize(), b.getBlockSize(), doorWayLineThickness);
 			}
 			else if(doorDirection == DoorDirection.RIGHT){
-				g.setColor(c);
+				g.setColor(doorColor);
 				g.fillRect(col*b.getBlockSize()+b.getBlockSize()-doorWayLineThickness, row*b.getBlockSize(), doorWayLineThickness, b.getBlockSize());
 			}
 			else if(doorDirection == DoorDirection.LEFT){
-				g.setColor(c);
+				g.setColor(doorColor);
 				g.fillRect(col*b.getBlockSize(), row*b.getBlockSize(), doorWayLineThickness, b.getBlockSize());
 			}
 		}
 		
 		// Draw the room names
-		g.setColor(c);
+		g.setColor(doorColor);
 		if(row == 3 && col == 1)
 			g.drawString(b.getRooms().get(roomType), col*b.getBlockSize() ,row*b.getBlockSize());
 		else if(row == 3 && col == 9)

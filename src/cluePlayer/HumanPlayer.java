@@ -13,6 +13,8 @@ public class HumanPlayer extends Player {
 		// TODO Auto-generated constructor stub
 	}
 	public void makeMove(){
+		board.highlightTargets();  // calls highlight but fails to work..
+		board.repaint();  
 		//highlight targets
 		
 		//allow human to make suggestions

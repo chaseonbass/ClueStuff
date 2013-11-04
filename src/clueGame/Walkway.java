@@ -11,6 +11,7 @@ import java.awt.Graphics;
 public class Walkway extends BoardCell {
 
 	public Walkway(int row, int col) {
+		cellColor = new Color(100,200,250);
 		this.col = col;
 		this.row = row;
 	}
@@ -24,11 +25,10 @@ public class Walkway extends BoardCell {
 	}
 
 	public void draw(Graphics g, Board b) {
-		Color c = new Color(100,200,250);
-		Color l = new Color(0,0,0);
-		g.setColor(c);
+		Color lineColor = new Color(0,0,0);
+		g.setColor(cellColor);
 		g.fillRect(col*b.getBlockSize(), row*b.getBlockSize(), b.getBlockSize(), b.getBlockSize());
-		g.setColor(l);
+		g.setColor(lineColor);
 		g.drawRect(col*b.getBlockSize(), row*b.getBlockSize(), b.getBlockSize(), b.getBlockSize());
 		
 	}

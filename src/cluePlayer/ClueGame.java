@@ -90,6 +90,9 @@ public class ClueGame extends JFrame {
 		pickNextPlayer(currentPlayer);
 		roll();
 		board.calcTargets(currentPlayer.getIndex(), roll);
+		board.highlightTargets();
+		board.repaint();
+		System.out.println(board.getTargets().size());
 		((HumanPlayer)currentPlayer).makeMove();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -330,11 +333,14 @@ public class ClueGame extends JFrame {
 		
 		public void move(){
 			if(currentPlayer.getName().equals(hplayer.getName()) && currentPlayer.getMustFinish()){
-				// tell player to make valid move
+				JOptionPane.showMessageDialog(null, "You must make a valid move before moving forward!", "OOPS!!", 
+						JOptionPane.INFORMATION_MESSAGE);
 			}
 			else{
 				currentPlayer.setMustFinish(true);
-				currentPlayer = nextPlayer;
+				currentPlayer = nextPlayer;  // this is messing things up a bit
+// need to SET currentPlayer to nextPlayer not set the player currentPlayer is pointing to to nextPlayer
+				System.out.println(currentPlayer.getName());
 				pickNextPlayer(currentPlayer);
 				roll();
 				//Update control panel display
