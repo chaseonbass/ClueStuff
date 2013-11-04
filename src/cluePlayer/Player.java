@@ -65,7 +65,7 @@ public class Player implements Comparable {
 		this.board = board;
 		index = board.calcIndex(row, column);
 		c = convertColor(color);
-		mustFinish = false;
+		mustFinish = true;
 		cards = new HashMap<String , Card>();
 	}
 
