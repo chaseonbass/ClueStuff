@@ -1,3 +1,4 @@
+
 package cluePlayer;
 
 import java.awt.Color;
@@ -16,9 +17,10 @@ public class Player implements Comparable {
 	private Map <String, Card> cards;
 	private String name, color;
 	private Color c;
-	protected int index, row, column;
 	protected boolean mustFinish;
+	protected int index, row, column;
 	Board board;
+	
 	public Card disproveSuggestion(String person, String room, String weapon){
 		ArrayList <Card> match= new ArrayList<Card>();
 
@@ -63,16 +65,8 @@ public class Player implements Comparable {
 		this.board = board;
 		c = convertColor(color);
 		cards = new HashMap<String , Card>();
-		mustFinish = true;
 	}
 
-	public void setMustFinish(boolean b){
-		mustFinish = b;
-	}
-	public boolean getMustFinish(){
-		return mustFinish;
-	}
-	
 	public String getName(){
 		return name;
 	}
@@ -111,13 +105,17 @@ public class Player implements Comparable {
 		}
 		return 0;
 	}
+	public void setMustFinish(Boolean b){
+		mustFinish = b;
+	}
+	public boolean getMustFinish(){
+		return mustFinish;
+	}
+	
 	public void draw(Graphics g, Board b){
 		g.setColor(convertColor(color));
 		g.fillOval(column*b.getBlockSize(), row*b.getBlockSize(), b.getBlockSize(), b.getBlockSize());
 		
 	}
-
-
-	
-	
 }
+

@@ -1,3 +1,4 @@
+
 package tests;
 
 import static org.junit.Assert.*;
@@ -303,9 +304,9 @@ public class GameActionTests {
 		System.out.println("what the hell" +suggestion);
 		Assert.assertEquals(null, suggestion);
 
-		//A suggestion only human can prove
+		//A suggestion only human can disprove
 		suggestion= cg.handleSuggestion("Batman", "Kitchen", "The Force", cplayer2);
-		
+		// -------------- THIS MIGHT BE BAD ----------------
 		Assert.assertEquals(null, suggestion);
 		
 		//cplayer1 makes the suggestion and is the only who can disprove it
@@ -378,3 +379,4 @@ public class GameActionTests {
 	}
 
 }
+
