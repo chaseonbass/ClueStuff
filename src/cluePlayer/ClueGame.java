@@ -35,7 +35,6 @@ public class ClueGame extends JFrame {
 	private static final int EXTENTION = 230;
 	
 	//File Menu
-	
 	private DetectiveNotesGUI dnotes;
 	
 	private JMenu createFileMenu(){
@@ -68,8 +67,11 @@ public class ClueGame extends JFrame {
 		  return yournotes;
 		}
 	
-	
+	// ------------- CONSTRUCTOR -------------------------------------------
 	public ClueGame(String boardFile, String legendFile, String peopleFile, String weaponFile){
+		JOptionPane.showMessageDialog(null, "You are the Joker. Press 'Next Player' to begin!", "Welcome to Clue", 
+				JOptionPane.INFORMATION_MESSAGE);
+		
 		board = new Board(boardFile, legendFile, this);
 		board.loadConfigFiles();
 		board.calcAdjacencies();
@@ -223,7 +225,7 @@ public class ClueGame extends JFrame {
 	public Card handleSuggestion(String person, String room, String weapon, Player accusingPerson){
 		Card suggestion= new Card();
 		suggestion= null;
-		for (Player player1 : getComputerPlayers())
+		for (Player player1 : getComputerPlayers()) // Why are we only looping through computer players???
 			if (!player1.equals(accusingPerson)){
 				 suggestion = player1.disproveSuggestion(person, room, weapon);
 				System.out.println("this is suggestion");
