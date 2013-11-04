@@ -18,6 +18,7 @@ public class Player implements Comparable {
 	private Color c;
 	protected int index, row, column;
 	Board board;
+	
 	public Card disproveSuggestion(String person, String room, String weapon){
 		ArrayList <Card> match= new ArrayList<Card>();
 

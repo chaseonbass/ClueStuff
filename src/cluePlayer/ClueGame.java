@@ -17,6 +17,7 @@ import java.util.Set;
 
 import javax.swing.*;
 
+import playerCards.PlayerCardsPanel;
 import ControlGUI.ClueGame_ControlGUI;
 import DetectiveNotesGUI.DetectiveNotesGUI;
 import clueGame.BadConfigFormatException;
@@ -33,6 +34,7 @@ public class ClueGame extends JFrame {
 	
 	private ClueGame_ControlGUI controlGUI;
 	private static final int EXTENTION = 230;
+	private PlayerCardsPanel playerCards;
 	
 	//File Menu
 	private DetectiveNotesGUI dnotes;
@@ -76,9 +78,12 @@ public class ClueGame extends JFrame {
 		board.loadConfigFiles();
 		board.calcAdjacencies();
 		loadConfigFiles(legendFile, weaponFile, peopleFile);
+		deal();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle ("Clue Game");
-		setSize (board.getNumColumns()*board.getBlockSize()+EXTENTION, board.getNumRows()*board.getBlockSize()+EXTENTION);
+		setSize (board.getNumColumns()*board.getBlockSize()+EXTENTION+50, board.getNumRows()*board.getBlockSize()+EXTENTION);
+		
 		//File menu
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -86,9 +91,16 @@ public class ClueGame extends JFrame {
 		dnotes = new DetectiveNotesGUI(cards);
 		
 		controlGUI = new ClueGame_ControlGUI();
+		
+		for (String p : players.keySet())
+			if (players.get(p) instanceof HumanPlayer)
+				playerCards = new PlayerCardsPanel(players.get(p).getCards());
 
 		add(createCenterLayout(), BorderLayout.CENTER);
 		add(controlGUI, BorderLayout.SOUTH);
+		
+		add(playerCards, BorderLayout.EAST);
+		
 		seenCards = new HashSet<Card>();
 	}
 	
