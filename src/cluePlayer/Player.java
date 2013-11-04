@@ -17,6 +17,7 @@ public class Player implements Comparable {
 	private String name, color;
 	private Color c;
 	protected int index, row, column;
+	protected boolean mustFinish;
 	Board board;
 	public Card disproveSuggestion(String person, String room, String weapon){
 		ArrayList <Card> match= new ArrayList<Card>();
@@ -62,8 +63,16 @@ public class Player implements Comparable {
 		this.board = board;
 		c = convertColor(color);
 		cards = new HashMap<String , Card>();
+		mustFinish = true;
 	}
 
+	public void setMustFinish(boolean b){
+		mustFinish = b;
+	}
+	public boolean getMustFinish(){
+		return mustFinish;
+	}
+	
 	public String getName(){
 		return name;
 	}

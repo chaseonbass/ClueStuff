@@ -12,7 +12,8 @@ import javax.swing.*;
 
 public class whoseTurnPanel extends JPanel{
 	private JTextField whose_turn;
-	public whoseTurnPanel(){
+	public whoseTurnPanel(String name){
+		// use parameter to set the text in the whose_turn
 		setLayout(new GridLayout(2,1));
 		JLabel turnLabel= new JLabel("                Whose Turn?");
 		whose_turn = new JTextField(10);
