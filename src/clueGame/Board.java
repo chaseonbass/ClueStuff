@@ -54,8 +54,8 @@ public class Board extends JPanel implements MouseListener {
 		legend = "ClueLegend.txt";
 	}
 	protected void paintComponent(Graphics g){
-		loadConfigFiles();
-		System.out.println(cells.size());
+		//loadConfigFiles();
+		//System.out.println(cells.size());
 		super.paintComponents(g);
 		for(int i = 0; i < cells.size(); i++){
 			cells.get(i).draw(g, this);
@@ -332,7 +332,7 @@ public class Board extends JPanel implements MouseListener {
 
 		for (int adj : temp) {
 			if(visited.get(adj)){
-				// skip
+				visited.put(adj, false);
 			} else {
 				visited.put(adj, true);
 				if (steps == 1 || cells.get(adj).isDoorway()) {
@@ -361,6 +361,15 @@ public class Board extends JPanel implements MouseListener {
 		targs.addAll(targets);
 		for(int i = 0; i < targs.size(); i++){
 			targs.get(i).highlight();
+		}
+		repaint();
+	}
+	
+	public void unHighlightTargets(){
+		//ArrayList <BoardCell> targs = new ArrayList<BoardCell>();
+		//targs.addAll(targets);
+		for(int i = 0; i < cells.size(); i++){
+			cells.get(i).clearHighlights();
 		}
 		repaint();
 	}
@@ -406,7 +415,8 @@ public class Board extends JPanel implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if(game.getCurrentPlayer().getName().equals(game.getHumanPlayer().getName()) && game.getCurrentPlayer().getMustFinish()){
+		if(game.getCurrentPlayer().getName().equals(game.getHumanPlayer().getName()) 
+				&& game.getCurrentPlayer().getMustFinish()){
 		System.out.println("MousePressed!---------------------------");
 		boolean valid = false;
 		ArrayList <BoardCell> targs = new ArrayList <BoardCell>();
@@ -416,10 +426,12 @@ public class Board extends JPanel implements MouseListener {
 			if(targs.get(i).containsClick(e.getX(), e.getY(), game.board)){
 				valid = true;
 				clicked = targs.get(i);
+				validate();
 			}
 		}
 		if(valid){
 			System.out.println("is valid!!");
+			unHighlightTargets();
 			game.getCurrentPlayer().setColumn(clicked.getCol());
 			game.getCurrentPlayer().setRow(clicked.getRow());
 			game.getCurrentPlayer().setMustFinish(false);

@@ -12,6 +12,7 @@ import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -36,97 +37,107 @@ public class ClueGame extends JFrame {
 	public Map <String, Card> cards;
 	private Solution solution;
 	public Board board;
-	
+
+	public boolean gameOver = false;
+
 	private ClueGame_ControlGUI controlGUI;
 	private static final int EXTENTION = 230;
 	private PlayerCardsPanel playerCards;
-	
+
 	//File Menu
 	private DetectiveNotesGUI dnotes;
-	
-	private JMenu createFileMenu(){
-	  JMenu menu = new JMenu("File"); 
-	  menu.add(createFileNotesItem());
-	  menu.add(createFileExitItem());
 
-	  return menu;
+	private JMenu createFileMenu(){
+		JMenu menu = new JMenu("File"); 
+		menu.add(createFileNotesItem());
+		menu.add(createFileExitItem());
+
+		return menu;
 	}
 	private JMenuItem createFileExitItem(){
-	  JMenuItem item = new JMenuItem("Exit");
-	  class MenuItemListener implements ActionListener {
-	    public void actionPerformed(ActionEvent e)
-	    {
-	       System.exit(0);
-	    }
-	  }
-	  item.addActionListener(new MenuItemListener());
-	  return item;
+		JMenuItem item = new JMenuItem("Exit");
+		class MenuItemListener implements ActionListener {
+			public void actionPerformed(ActionEvent e)
+			{
+				System.exit(0);
+			}
+		}
+		item.addActionListener(new MenuItemListener());
+		return item;
 	}
 	private JMenuItem createFileNotesItem(){
-		  JMenuItem yournotes = new JMenuItem("Detective Notes");
-		  class MenuItemListener implements ActionListener {
-		    public void actionPerformed(ActionEvent e)
-		    {
-		       dnotes.setVisible(true);
-		    }
-		  }
-		 yournotes.addActionListener(new MenuItemListener());
-		  return yournotes;
+		JMenuItem yournotes = new JMenuItem("Detective Notes");
+		class MenuItemListener implements ActionListener {
+			public void actionPerformed(ActionEvent e)
+			{
+				dnotes.setVisible(true);
+			}
 		}
-	
+		yournotes.addActionListener(new MenuItemListener());
+		return yournotes;
+	}
+
 	// ------------- CONSTRUCTOR -------------------------------------------
 	public ClueGame(String boardFile, String legendFile, String peopleFile, String weaponFile){
 		// HashMaps are ordered randomly.  The first person read from the file is Batman and the human player is set as such
-		
-		JOptionPane.showMessageDialog(null, "You are the Joker. Press 'Next Player' to begin!", "Welcome to Clue", 
+
+		JOptionPane.showMessageDialog(null, "You are the Batman. Press 'Next Player' to begin!", "Welcome to Clue", 
 				JOptionPane.INFORMATION_MESSAGE);
-		
+
 		board = new Board(boardFile, legendFile, this);
 		board.loadConfigFiles();
 		board.calcAdjacencies();
 		loadConfigFiles(legendFile, weaponFile, peopleFile);
 		deal();
-		currentPlayer = players.get("Batman");
-		pickNextPlayer(currentPlayer);
-		roll();
-		board.calcTargets(currentPlayer.getIndex(), roll);
-		board.highlightTargets();
-		board.repaint();
-		System.out.println(board.getTargets().size());
-		((HumanPlayer)currentPlayer).makeMove();
-		
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle ("Clue Game");
 		setSize (board.getNumColumns()*board.getBlockSize()+EXTENTION+50, board.getNumRows()*board.getBlockSize()+EXTENTION);
-		
+
 		//File menu
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		menuBar.add(createFileMenu());
 		dnotes = new DetectiveNotesGUI(cards);
-		
+
+		currentPlayer = hplayer;
+		roll();
 		controlGUI = new ClueGame_ControlGUI(this);
-		
+
 		for (String p : players.keySet())
 			if (players.get(p) instanceof HumanPlayer)
 				playerCards = new PlayerCardsPanel(players.get(p).getCards());
 
 		add(createCenterLayout(), BorderLayout.CENTER);
 		add(controlGUI, BorderLayout.SOUTH);
-		
+
 		add(playerCards, BorderLayout.EAST);
-		
+
 		seenCards = new HashSet<Card>();
-	}
+
+		// First Move
+		//currentPlayer = players.get("Batman");
+		pickNextPlayer(currentPlayer);
 	
+		board.startTargets(currentPlayer.getRow(), currentPlayer.getColumn(), roll);
+		board.highlightTargets();
+		board.repaint();
+		//System.out.println(board.getTargets().size());
+		((HumanPlayer)currentPlayer).makeMove();
+
+
+		//while (!gameOver)
+		//move();
+	}
+
 	private HumanPlayer hplayer;
 	private ArrayList<ComputerPlayer> cplayers;
-	
+
 	public ClueGame(){
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle ("Clue Game");
 		setSize (700,200);
-		
+
 		add(createCenterLayout(), BorderLayout.CENTER);
 		seenCards = new HashSet<Card>();
 	}
@@ -135,61 +146,65 @@ public class ClueGame extends JFrame {
 		panel.setLayout(new GridLayout(1,3));
 		panel.add(board);
 		return panel;
-		
+
 	}
-	
+
 	public void addSeenCards(Card c){
 		seenCards.add(c);
 	}
 	public Set<Card> getSeenCards(){
 		return seenCards;
 	}
-	
+
 	public void deal(){  // deals cards to players
 		ArrayList <Card> aCards = new ArrayList<Card>();  // created to make things easier
 		ArrayList <Player> aPlayers = new ArrayList<Player>();  // makes things easier
 		for(String playKey : players.keySet()){
 			aPlayers.add(players.get(playKey));
 		}
+		
 		for(String key : cards.keySet()){
 			aCards.add(cards.get(key));
 		}
+		
+		Collections.shuffle(aCards);
+		
 		for(int i = 0; i < aCards.size(); i++){
 			aPlayers.get((i)%aPlayers.size()).addCard(aCards.get(i));  
 		}
-		
-		
+
+
 	}
 	public void loadRoomCards(String legend){  // reads rooms and adds to cards
 		cards = new HashMap <String, Card>();
 		try{
-		FileReader legendReader = new FileReader(legend);
-		Scanner legendIn = new Scanner(legendReader);
-		int lineNumber = 0;
-		
-		while (legendIn.hasNextLine()) {
-			lineNumber = lineNumber + 1;
-			String legendLine = legendIn.nextLine();
-			if (!legendLine.contains(","))
-				throw new BadConfigFormatException(legend, ",", lineNumber);
-			if (legendLine.indexOf(',')!=legendLine.lastIndexOf(','))
-				throw new BadConfigFormatException(legend, "MULTIPLE ','", lineNumber);
-			
-			String[] splitLegendLine = legendLine.split(",");
-			// Splits the line into two strings, the first being the initial, 
-			//   the second being the name of the room   
-			// Check if we actually have a character
-			if (splitLegendLine[0].length() > 1) {
-				throw new BadConfigFormatException(legend, splitLegendLine[0], lineNumber);
-			} else {
-				char tempInitial = splitLegendLine[0].toCharArray()[0];
-				String tempRoomName = splitLegendLine[1].trim();
-				if(!tempRoomName.equals("Closet") && !tempRoomName.equals("Walkway")){
-					Card c = new Card(tempRoomName, CardType.ROOM);
-					cards.put(tempRoomName, c);
+			FileReader legendReader = new FileReader(legend);
+			Scanner legendIn = new Scanner(legendReader);
+			int lineNumber = 0;
+
+			while (legendIn.hasNextLine()) {
+				lineNumber = lineNumber + 1;
+				String legendLine = legendIn.nextLine();
+				if (!legendLine.contains(","))
+					throw new BadConfigFormatException(legend, ",", lineNumber);
+				if (legendLine.indexOf(',')!=legendLine.lastIndexOf(','))
+					throw new BadConfigFormatException(legend, "MULTIPLE ','", lineNumber);
+
+				String[] splitLegendLine = legendLine.split(",");
+				// Splits the line into two strings, the first being the initial, 
+				//   the second being the name of the room   
+				// Check if we actually have a character
+				if (splitLegendLine[0].length() > 1) {
+					throw new BadConfigFormatException(legend, splitLegendLine[0], lineNumber);
+				} else {
+					char tempInitial = splitLegendLine[0].toCharArray()[0];
+					String tempRoomName = splitLegendLine[1].trim();
+					if(!tempRoomName.equals("Closet") && !tempRoomName.equals("Walkway")){
+						Card c = new Card(tempRoomName, CardType.ROOM);
+						cards.put(tempRoomName, c);
+					}
 				}
 			}
-		}
 		}
 		catch(FileNotFoundException e){
 			System.out.println(e.getLocalizedMessage());
@@ -201,7 +216,7 @@ public class ClueGame extends JFrame {
 		loadWeaponCards(weaponFile);
 		loadPeopleCards(peopleFile);
 	}
-	
+
 	public void loadWeaponCards(String weaponFile) {  // adds weapons to the cards
 		try{
 			FileReader legendReader = new FileReader(weaponFile);
@@ -255,7 +270,7 @@ public class ClueGame extends JFrame {
 		suggestion= null;
 		for (Player player1 : getComputerPlayers()) // Why are we only looping through computer players???
 			if (!player1.equals(accusingPerson)){
-				 suggestion = player1.disproveSuggestion(person, room, weapon);
+				suggestion = player1.disproveSuggestion(person, room, weapon);
 				System.out.println("this is suggestion");
 				if (suggestion!=null){
 					seenCards.add(suggestion);
@@ -265,17 +280,17 @@ public class ClueGame extends JFrame {
 		return null;
 	}
 
-	
+
 	public boolean checkAccusation(String person, String weapon, String room){
 		if (person.equals(solution.getPerson()) && weapon.equals(solution.getWeapon()) && room.equals(solution.getRoom())){
 			return true;
 		}
-		
+
 		else{
-		return false;
+			return false;
 		}
 	}
-	
+
 
 	public Solution getSolution(){ 
 		return solution;
@@ -283,7 +298,7 @@ public class ClueGame extends JFrame {
 	public void setSolution(Solution solution){  // done for testing purposes
 		this.solution= solution;
 	}
-	
+
 	public void setComputerPlayer(ArrayList<ComputerPlayer> cplayers){
 		this.cplayers= cplayers;
 	}
@@ -300,12 +315,12 @@ public class ClueGame extends JFrame {
 		for(String name : players.keySet()){
 			g.setColor(players.get(name).convertColor(players.get(name).getColor()));
 			players.get(name).draw(g, board);
-			
+
 		}
 	}
 	public void pickNextPlayer(Player currentPlayer){
 		ArrayList <Player>plyrs = new ArrayList<Player>();
-		
+
 		for(String key : players.keySet()){
 			plyrs.add(players.get(key));
 		}
@@ -319,54 +334,61 @@ public class ClueGame extends JFrame {
 				}
 			}
 		}
-		
+
 	}
 	// moving the players functions
-		private Player currentPlayer;
-		private Player nextPlayer;
-		private int roll;
+	private Player currentPlayer;
+	private Player nextPlayer;
+	private int roll;
+
+	public void roll(){
+		Random rand = new Random();
+		roll = rand.nextInt(6)+1;
 		
-		public void roll(){
-			Random rand = new Random();
-			roll = rand.nextInt(6)+1;
+	}
+
+	public void move(){
+		if(currentPlayer.getName().equals(hplayer.getName()) && currentPlayer.getMustFinish()){
+			JOptionPane.showMessageDialog(null, "You must make a valid move before moving forward!", "OOPS!!", 
+					JOptionPane.INFORMATION_MESSAGE);
 		}
-		
-		public void move(){
-			if(currentPlayer.getName().equals(hplayer.getName()) && currentPlayer.getMustFinish()){
-				JOptionPane.showMessageDialog(null, "You must make a valid move before moving forward!", "OOPS!!", 
-						JOptionPane.INFORMATION_MESSAGE);
+		else{
+			currentPlayer.setMustFinish(true);
+			currentPlayer = nextPlayer;  // this is messing things up a bit
+			// need to SET currentPlayer to nextPlayer not set the player currentPlayer is pointing to to nextPlayer
+			System.out.println(currentPlayer.getName());
+			pickNextPlayer(currentPlayer);
+			roll();
+			controlGUI.dPanel.displayRoll.setText(Integer.toString(roll));
+			controlGUI.wtPanel.whose_turn.setText(currentPlayer.getName());
+			
+			validate();
+			repaint();
+			
+			//Update control panel display
+			board.startTargets(currentPlayer.getRow(),currentPlayer.getColumn(), roll);
+			// make board show targets
+			if(currentPlayer.getName().equals(hplayer.getName())){
+				((HumanPlayer) currentPlayer).makeMove();
 			}
 			else{
-				currentPlayer.setMustFinish(true);
-				currentPlayer = nextPlayer;  // this is messing things up a bit
-// need to SET currentPlayer to nextPlayer not set the player currentPlayer is pointing to to nextPlayer
-				System.out.println(currentPlayer.getName());
-				pickNextPlayer(currentPlayer);
-				roll();
-				//Update control panel display
-				board.calcTargets(currentPlayer.getIndex(), roll);
-				// make board show targets
-				if(currentPlayer.getName().equals(hplayer.getName())){
-					((HumanPlayer) currentPlayer).makeMove();
-				}
-				else{
-					// computer player pick and move to target
-					((ComputerPlayer) currentPlayer).makeMove();
-				}
+				// computer player pick and move to target
+				((ComputerPlayer) currentPlayer).makeMove();
 			}
 		}
-		public Player getCurrentPlayer(){
-			return currentPlayer;
-		}
-		public int getRoll(){
-			return roll;
-		}
+	}
+	public Player getCurrentPlayer(){
+		return currentPlayer;
+	}
+	public int getRoll(){
+		return roll;
+	}
 	public static void main(String args[]){
 		ClueGame gui= new ClueGame("BoardLayout.csv", "legend.txt", "Players.txt", "Weapons.txt");
 		gui.setVisible (true);
-		
+
 	}
-	
-	
+
+
 }
 

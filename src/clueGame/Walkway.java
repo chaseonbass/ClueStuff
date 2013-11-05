@@ -27,10 +27,10 @@ public class Walkway extends BoardCell {
 	public void draw(Graphics g, Board b) {
 		Color lineColor = new Color(0,0,0);
 		g.setColor(cellColor);
+		//System.out.println("drawing with " + cellColor);
 		g.fillRect(col*b.getBlockSize(), row*b.getBlockSize(), b.getBlockSize(), b.getBlockSize());
 		g.setColor(lineColor);
 		g.drawRect(col*b.getBlockSize(), row*b.getBlockSize(), b.getBlockSize(), b.getBlockSize());
-		
 	}
 
 }

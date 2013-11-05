@@ -15,42 +15,36 @@ import cluePlayer.*;
 public class ClueGame_ControlGUI extends JPanel{
 	ClueGame cg;
 	
-	public Component createNorthLayout(){
-		JPanel panel= new JPanel();
-		panel.setLayout(new GridLayout(1,3));
-		whoseTurnPanel wtPanel= new whoseTurnPanel(cg.getCurrentPlayer().getName());
-		panel.add(wtPanel);
-		buttonsPanel bPanel= new buttonsPanel();
-		panel.add(bPanel);
-		return panel;
-		
+	private int theRoll;
+	
+	public whoseTurnPanel wtPanel;
+	public JButton nextPlayerButton;
+	public JButton accusationButton;
+	public DiePanel dPanel;
+	public GuessPanel gPanel;
+	public GuessResultPanel gResult;
+	
+	public void setRoll(int newRoll) {
+		theRoll = newRoll;
 	}
-	public Component createSouthLayout(){
-		JPanel panel= new JPanel();
-		panel.setLayout(new GridLayout(3,1));
-		DiePanel dPanel= new DiePanel(cg.getRoll());
-		panel.add(dPanel);
-		GuessPanel gPanel= new GuessPanel();
-		panel.add(gPanel);
-		GuessResultPanel gResult= new GuessResultPanel();
-		panel.add(gResult);
-		return panel;
-	}
+	
 	public ClueGame_ControlGUI(ClueGame cg){
 		this.cg = cg;
+		
+		theRoll = cg.getRoll();
 
 		setLayout(new GridLayout(2,3));
 		
-		whoseTurnPanel wtPanel= new whoseTurnPanel(cg.getCurrentPlayer().getName());
+		wtPanel= new whoseTurnPanel(cg.getCurrentPlayer().getName());
 		//buttonsPanel bPanel= new buttonsPanel();
 		//JPanel blankPanel = new JPanel();
-		JButton nextPlayerButton = new JButton("Next Player");
+		nextPlayerButton = new JButton("Next Player");
 		nextPlayerButton.addActionListener(new ButtonListener());
-		JButton accusationButton = new JButton("Make Accusation");
+		accusationButton = new JButton("Make Accusation");
 		accusationButton.addActionListener(new ButtonListener());
-		DiePanel dPanel= new DiePanel(cg.getRoll());
-		GuessPanel gPanel= new GuessPanel();
-		GuessResultPanel gResult= new GuessResultPanel();
+		dPanel= new DiePanel(theRoll);
+		gPanel= new GuessPanel();
+		gResult= new GuessResultPanel();
 		
 		add(wtPanel);
 		add(nextPlayerButton);

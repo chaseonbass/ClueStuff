@@ -33,7 +33,7 @@ public abstract class BoardCell {
 	public boolean containsClick(int mouseX, int mouseY, Board b) {
 		
 		Rectangle rect = new Rectangle(col*b.getBlockSize(), row*b.getBlockSize() , b.getBlockSize(), b.getBlockSize());
-		if (rect.contains(new Point(mouseX, mouseY))) 
+		if (rect.contains(new Point(mouseX, mouseY)))
 			return true;
 		return false;
 	}
@@ -42,16 +42,20 @@ public abstract class BoardCell {
 	// These are used later for draw()
 	protected int row;
 	protected int col;
-	protected Color cellColor;
+	protected Color cellColor, doorColor;
 	public abstract void draw(Graphics g, Board b);
 	public int getRow(){
 		return row;
 	}
 	public void highlight(){  // used for highlighting targets.
 		cellColor = new Color(0,100,0);
+		doorColor = new Color(0,100,0);
+		//System.out.println("switched to " + cellColor);
+		
 	}
 	public void clearHighlights(){  // used to get rid of highlights
 		cellColor = new Color(100,200,250);
+		doorColor = new Color(100,0,250);
 	}
 	public int getCol(){
 		return col;

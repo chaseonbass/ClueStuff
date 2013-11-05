@@ -9,7 +9,7 @@ import java.awt.Graphics;
  */
 
 public class RoomCell extends BoardCell {
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -56,6 +56,7 @@ public class RoomCell extends BoardCell {
 	}
 	
 	public RoomCell(String config, int row, int column) {
+		doorColor = new Color(100,0,250);
 		// break up 'config' and set direction
 		if (config.length() > 1){
 			String dir = config.substring(1,2);
@@ -109,7 +110,6 @@ public class RoomCell extends BoardCell {
 
 	@Override
 	public void draw(Graphics g, Board b) {
-		Color doorColor = new Color(100,0,250);
 		if(isDoorway()){
 			if(doorDirection == DoorDirection.DOWN){
 				g.setColor(doorColor);

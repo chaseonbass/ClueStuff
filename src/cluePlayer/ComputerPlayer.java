@@ -97,7 +97,7 @@ public class ComputerPlayer extends Player{
 		BoardCell chosen = pickLocation(board.getTargets());
 		setColumn(chosen.getCol());
 		setRow(chosen.getRow());
-		setIndex(chosen.getRow(), chosen.getCol());
+		//setIndex(chosen.getRow(), chosen.getCol());
 		board.repaint();
 		
 		// space for handling suggestions..

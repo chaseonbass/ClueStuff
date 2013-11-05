@@ -8,7 +8,7 @@ import javax.swing.border.TitledBorder;
 
 
 public class DiePanel extends JPanel{
-	private JTextField displayRoll;
+	public JTextField displayRoll;
 	
 	public DiePanel(int rollC){
 		
