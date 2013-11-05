@@ -8,7 +8,7 @@ import javax.swing.border.TitledBorder;
 
 
 public class GuessResultPanel extends JPanel{
-	private JTextField displayResult;
+	public JTextField displayResult;
 	public GuessResultPanel() {
 		setLayout(new GridLayout(2,1));
 		displayResult= new JTextField(20);

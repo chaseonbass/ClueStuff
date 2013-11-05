@@ -41,6 +41,12 @@ public class Suggestion {
 		return room;
 	}
 
+	@Override
+	public String toString() {
+		return "Is it " + person + " with the " + weapon
+				+ " in the " + room + "?";
+	}
+
 	public String getPerson() {
 		return person;
 	}

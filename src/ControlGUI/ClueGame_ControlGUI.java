@@ -39,9 +39,9 @@ public class ClueGame_ControlGUI extends JPanel{
 		//buttonsPanel bPanel= new buttonsPanel();
 		//JPanel blankPanel = new JPanel();
 		nextPlayerButton = new JButton("Next Player");
-		nextPlayerButton.addActionListener(new ButtonListener());
+		nextPlayerButton.addActionListener(new NextPlayerButtonListener());
 		accusationButton = new JButton("Make Accusation");
-		accusationButton.addActionListener(new ButtonListener());
+		accusationButton.addActionListener(new AccusationButtonListener());
 		dPanel= new DiePanel(theRoll);
 		gPanel= new GuessPanel();
 		gResult= new GuessResultPanel();
@@ -60,7 +60,7 @@ public class ClueGame_ControlGUI extends JPanel{
 		
 		
 	}
-	private class ButtonListener implements ActionListener
+	private class NextPlayerButtonListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
@@ -69,10 +69,16 @@ public class ClueGame_ControlGUI extends JPanel{
 			
 		}
 	}
-	/*public static void main(String[] args) {
-		ClueGame_ControlGUI gui= new ClueGame_ControlGUI();
-		
-		gui.setVisible(true);
-	}*/
+	
+	private class AccusationButtonListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			// do other stuff, like accusing
+			//System.out.println("Button pressed");
+			
+		}
+	}
+	
 
 }

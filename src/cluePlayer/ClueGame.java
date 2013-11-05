@@ -81,7 +81,7 @@ public class ClueGame extends JFrame {
 	public ClueGame(String boardFile, String legendFile, String peopleFile, String weaponFile){
 		// HashMaps are ordered randomly.  The first person read from the file is Batman and the human player is set as such
 
-		JOptionPane.showMessageDialog(null, "You are the Batman. Press 'Next Player' to begin!", "Welcome to Clue", 
+		JOptionPane.showMessageDialog(null, "You are the Batman. Press 'OK' to begin!", "Welcome to Clue", 
 				JOptionPane.INFORMATION_MESSAGE);
 
 		board = new Board(boardFile, legendFile, this);
@@ -223,6 +223,7 @@ public class ClueGame extends JFrame {
 	}
 	public void loadPeopleCards(String peopleFile){  // adds each person as a card and as a player
 		players = new HashMap<String, Player>();
+		cplayers = new ArrayList<ComputerPlayer>();
 		try{
 			String name;
 			String[] line;
@@ -240,6 +241,7 @@ public class ClueGame extends JFrame {
 				else{
 					Player p = new ComputerPlayer(line[0], line[1], Integer.parseInt(line[2]), Integer.parseInt(line[3]), board);
 					players.put(line[0],p);  // adds the player
+					cplayers.add((ComputerPlayer) p);
 				}
 				Card c = new Card(line[0], CardType.PERSON);
 				cards.put(line[0], c);  // adds as a card
@@ -257,9 +259,9 @@ public class ClueGame extends JFrame {
 	public Card handleSuggestion(String person, String room, String weapon, Player accusingPerson){
 		Card suggestion= new Card();
 		suggestion= null;
-		for (Player player1 : getComputerPlayers()) // Why are we only looping through computer players???
-			if (!player1.equals(accusingPerson)){
-				suggestion = player1.disproveSuggestion(person, room, weapon);
+		for (Player p : getComputerPlayers()) // Why are we only looping through computer players???
+			if (!p.equals(accusingPerson)){
+				suggestion = p.disproveSuggestion(person, room, weapon);
 				//System.out.println("this is suggestion");
 				if (suggestion!=null){
 					seenCards.add(suggestion);
@@ -362,6 +364,14 @@ public class ClueGame extends JFrame {
 			else{
 				// computer player pick and move to target
 				((ComputerPlayer) currentPlayer).makeMove();
+				
+				// (String person, String room, String weapon, Player accusingPerson){
+				Suggestion tempSug = ((ComputerPlayer) currentPlayer).createSuggestion(seenCards, cards, board.getRooms());
+				Card tempCard = handleSuggestion(tempSug.getPerson(),tempSug.getRoom(),tempSug.getWeapon(), currentPlayer);
+				
+				// Use tempCard & tempSug to update panels
+				controlGUI.gPanel.theGuess.setText(tempSug.toString());
+				controlGUI.gResult.displayResult.setText(tempCard.getName());
 			}
 		}
 	}
