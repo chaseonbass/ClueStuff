@@ -276,7 +276,24 @@ public class Board extends JPanel implements MouseListener {
 			//if you can walk on it (Walkway OR Room door)
 			//check direction
 
-			if (isWalkable(i)) {
+			// Check if in a Door
+			if (cells.get(i).isDoorway()) {
+				
+				if (row > 0)
+					if (isWalkable(calcIndex(row-1, column)) && ((RoomCell) cells.get(i)).getDoorDirection().equals(RoomCell.DoorDirection.UP))
+						tempAdj.add(calcIndex(row-1, column));
+				if (row < numRows - 1)
+					if (isWalkable(calcIndex(row+1, column)) && ((RoomCell) cells.get(i)).getDoorDirection().equals(RoomCell.DoorDirection.DOWN)) 
+						tempAdj.add(calcIndex(row+1, column));
+				if (column > 0)
+					if (isWalkable(calcIndex(row, column-1)) && ((RoomCell) cells.get(i)).getDoorDirection().equals(RoomCell.DoorDirection.LEFT))
+						tempAdj.add(calcIndex(row, column-1));
+				if (column < numColumns - 1) 	
+					if (isWalkable(calcIndex(row, column+1)) && ((RoomCell) cells.get(i)).getDoorDirection().equals(RoomCell.DoorDirection.RIGHT))
+						tempAdj.add(calcIndex(row, column+1));
+					
+
+			} else if (isWalkable(i)) { // everything else
 				if (column > 0) { // left
 					if (isWalkable(calcIndex(row, column - 1)) && !bothSameRoomDoorways(i, calcIndex(row, column - 1)))
 						if (cells.get(calcIndex(row, column - 1)) instanceof Walkway){
@@ -364,7 +381,7 @@ public class Board extends JPanel implements MouseListener {
 		}
 		repaint();
 	}
-	
+
 	public void unHighlightTargets(){
 		//ArrayList <BoardCell> targs = new ArrayList<BoardCell>();
 		//targs.addAll(targets);
@@ -417,30 +434,30 @@ public class Board extends JPanel implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		if(game.getCurrentPlayer().getName().equals(game.getHumanPlayer().getName()) 
 				&& game.getCurrentPlayer().getMustFinish()){
-		//System.out.println("MousePressed!---------------------------");
-		boolean valid = false;
-		ArrayList <BoardCell> targs = new ArrayList <BoardCell>();
-		targs.addAll(targets);
-		BoardCell clicked = new Walkway(0,0);
-		for(int i = 0; i < targs.size(); i++){
-			if(targs.get(i).containsClick(e.getX(), e.getY(), game.board)){
-				valid = true;
-				clicked = targs.get(i);
+			//System.out.println("MousePressed!---------------------------");
+			boolean valid = false;
+			ArrayList <BoardCell> targs = new ArrayList <BoardCell>();
+			targs.addAll(targets);
+			BoardCell clicked = new Walkway(0,0);
+			for(int i = 0; i < targs.size(); i++){
+				if(targs.get(i).containsClick(e.getX(), e.getY(), game.board)){
+					valid = true;
+					clicked = targs.get(i);
+				}
 			}
-		}
-		if(valid){
-			//System.out.println("is valid!!");
-			unHighlightTargets();
-			game.getCurrentPlayer().setColumn(clicked.getCol());
-			game.getCurrentPlayer().setRow(clicked.getRow());
-			game.getCurrentPlayer().setMustFinish(false);
-			repaint();
-			valid = false;
-		}
-		else{
-			JOptionPane.showMessageDialog(null, "That is an invalid choice, try again.", "OOPS!!", 
-					JOptionPane.INFORMATION_MESSAGE);
-		}
+			if(valid){
+				//System.out.println("is valid!!");
+				unHighlightTargets();
+				game.getCurrentPlayer().setColumn(clicked.getCol());
+				game.getCurrentPlayer().setRow(clicked.getRow());
+				game.getCurrentPlayer().setMustFinish(false);
+				repaint();
+				valid = false;
+			}
+			else{
+				JOptionPane.showMessageDialog(null, "That is an invalid choice, try again.", "OOPS!!", 
+						JOptionPane.INFORMATION_MESSAGE);
+			}
 		}
 
 	}

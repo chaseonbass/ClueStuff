@@ -10,7 +10,7 @@ import cluePlayer.*;
 import cluePlayer.Card.CardType;
 
 public class ComputerPlayer extends Player{
-	RoomCell lastVisited;
+	char lastVisited;
 	
 	public ComputerPlayer(){
 		super();
@@ -19,7 +19,7 @@ public class ComputerPlayer extends Player{
 	public ComputerPlayer(String name, String color, int row, int column, Board board) {
 		super(name, color, row, column, board);
 		if(board.getCellAt(board.calcIndex(row, column)).isRoom()){
-		lastVisited = board.getRoomCellAt(board.calcIndex(row,column));
+		lastVisited = board.getRoomCellAt(board.calcIndex(row,column)).getRoomType();
 	}
 		// TODO Auto-generated constructor stub
 	}
@@ -28,23 +28,23 @@ public class ComputerPlayer extends Player{
 		Random rand = new Random();
 		int randNum = rand.nextInt(targets.size());
 		int index = 0;
-		if(lastVisited == null){
+//		if(lastVisited == null){
+//			for(BoardCell ind : targets){
+//				if(ind.isRoom()){
+//					lastVisited = (RoomCell) ind;
+//					return ind;
+//				}
+//			}
+//			for(BoardCell ind : targets){
+//				if(index == randNum)
+//					return ind;
+//				index++;
+//			}
+//		}
+//		else{
 			for(BoardCell ind : targets){
-				if(ind.isRoom()){
-					lastVisited = (RoomCell) ind;
-					return ind;
-				}
-			}
-			for(BoardCell ind : targets){
-				if(index == randNum)
-					return ind;
-				index++;
-			}
-		}
-		else{
-			for(BoardCell ind : targets){
-				if(ind.isRoom() && !ind.equals(lastVisited)){
-					lastVisited = (RoomCell) ind;
+				if(ind.isRoom() && !(((RoomCell) ind).getRoomType() == lastVisited)){
+					lastVisited = ((RoomCell) ind).getRoomType();
 					return ind;
 				}
 			}
@@ -54,7 +54,7 @@ public class ComputerPlayer extends Player{
 				index++;
 			}
 				
-		}
+		//}
 		return null;
 	}
 	public Suggestion createSuggestion(Set<Card> seenCards, Map <String, Card> cards, Map<Character, String> rooms){
@@ -89,7 +89,7 @@ public class ComputerPlayer extends Player{
 		}
 
 					
-		rCard = cards.get(rooms.get(lastVisited.getRoomType()));
+		rCard = cards.get(rooms.get(lastVisited));
 		Suggestion guess = new Suggestion(pName, wName, rCard.getName());
 		return guess;
 	}
