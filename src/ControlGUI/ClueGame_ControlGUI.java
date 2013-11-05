@@ -65,7 +65,7 @@ public class ClueGame_ControlGUI extends JPanel{
 		public void actionPerformed(ActionEvent e)
 		{
 			cg.move();
-			System.out.println("Button pressed");
+			//System.out.println("Button pressed");
 			
 		}
 	}

@@ -29,7 +29,7 @@ public class Player implements Comparable {
 				match.add(cards.get(c));
 			}
 		}
-		Random rand= new Random();
+		
 		if(match.size() >= 1){
 			int next= new Random().nextInt(match.size());
 			return match.get(next);

@@ -56,7 +56,7 @@ public class Board extends JPanel implements MouseListener {
 	protected void paintComponent(Graphics g){
 		//loadConfigFiles();
 		//System.out.println(cells.size());
-		super.paintComponents(g);
+		super.paintComponent(g);
 		for(int i = 0; i < cells.size(); i++){
 			cells.get(i).draw(g, this);
 		}
@@ -417,7 +417,7 @@ public class Board extends JPanel implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		if(game.getCurrentPlayer().getName().equals(game.getHumanPlayer().getName()) 
 				&& game.getCurrentPlayer().getMustFinish()){
-		System.out.println("MousePressed!---------------------------");
+		//System.out.println("MousePressed!---------------------------");
 		boolean valid = false;
 		ArrayList <BoardCell> targs = new ArrayList <BoardCell>();
 		targs.addAll(targets);
@@ -429,7 +429,7 @@ public class Board extends JPanel implements MouseListener {
 			}
 		}
 		if(valid){
-			System.out.println("is valid!!");
+			//System.out.println("is valid!!");
 			unHighlightTargets();
 			game.getCurrentPlayer().setColumn(clicked.getCol());
 			game.getCurrentPlayer().setRow(clicked.getRow());
