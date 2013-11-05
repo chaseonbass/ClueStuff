@@ -426,7 +426,6 @@ public class Board extends JPanel implements MouseListener {
 			if(targs.get(i).containsClick(e.getX(), e.getY(), game.board)){
 				valid = true;
 				clicked = targs.get(i);
-				validate();
 			}
 		}
 		if(valid){
