@@ -124,10 +124,6 @@ public class ClueGame extends JFrame {
 		board.repaint();
 		//System.out.println(board.getTargets().size());
 		((HumanPlayer)currentPlayer).makeMove();
-
-
-		//while (!gameOver)
-		//move();
 	}
 
 	private HumanPlayer hplayer;
@@ -264,7 +260,7 @@ public class ClueGame extends JFrame {
 		for (Player player1 : getComputerPlayers()) // Why are we only looping through computer players???
 			if (!player1.equals(accusingPerson)){
 				suggestion = player1.disproveSuggestion(person, room, weapon);
-				System.out.println("this is suggestion");
+				//System.out.println("this is suggestion");
 				if (suggestion!=null){
 					seenCards.add(suggestion);
 					return suggestion;
@@ -349,13 +345,12 @@ public class ClueGame extends JFrame {
 			currentPlayer.setMustFinish(true);
 			currentPlayer = nextPlayer;  // this is messing things up a bit
 			// need to SET currentPlayer to nextPlayer not set the player currentPlayer is pointing to to nextPlayer
-			System.out.println(currentPlayer.getName());
+			//System.out.println(currentPlayer.getName());
 			pickNextPlayer(currentPlayer);
 			roll();
 			controlGUI.dPanel.displayRoll.setText(Integer.toString(roll));
 			controlGUI.wtPanel.whose_turn.setText(currentPlayer.getName());
 			
-			validate();
 			repaint();
 			
 			//Update control panel display
