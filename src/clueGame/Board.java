@@ -56,7 +56,7 @@ public class Board extends JPanel implements MouseListener {
 	protected void paintComponent(Graphics g){
 		//loadConfigFiles();
 		//System.out.println(cells.size());
-		super.paintComponents(g);
+		super.paintComponent(g);
 		for(int i = 0; i < cells.size(); i++){
 			cells.get(i).draw(g, this);
 		}
