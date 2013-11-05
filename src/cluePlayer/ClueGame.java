@@ -96,7 +96,7 @@ public class ClueGame extends JFrame {
 			if (players.get(p) instanceof HumanPlayer)
 				playerCards = new PlayerCardsPanel(players.get(p).getCards());
 
-		add(createCenterLayout(), BorderLayout.CENTER);
+		add(board, BorderLayout.CENTER);
 		add(controlGUI, BorderLayout.SOUTH);
 		
 		add(playerCards, BorderLayout.EAST);
@@ -112,16 +112,10 @@ public class ClueGame extends JFrame {
 		setTitle ("Clue Game");
 		setSize (700,200);
 		
-		add(createCenterLayout(), BorderLayout.CENTER);
+		add(board, BorderLayout.CENTER);
 		seenCards = new HashSet<Card>();
 	}
-	public Component createCenterLayout(){
-		JPanel panel= new JPanel();
-		panel.setLayout(new GridLayout(1,3));
-		panel.add(board);
-		return panel;
-		
-	}
+	
 	
 	public void addSeenCards(Card c){
 		seenCards.add(c);
