@@ -8,14 +8,15 @@ import javax.swing.border.TitledBorder;
 
 
 public class DiePanel extends JPanel{
-	private JTextField displayRoll;
+	public JTextField displayRoll;
 	
-	public DiePanel(){
+	public DiePanel(int rollC){
 		
 		setBorder(new TitledBorder (new EtchedBorder(), "Die"));
 		
 		JLabel roll = new JLabel ("Roll");
 		displayRoll = new JTextField(10);
+		displayRoll.setText(Integer.toString(rollC));
 		add(roll);
 		add(displayRoll);
 	}

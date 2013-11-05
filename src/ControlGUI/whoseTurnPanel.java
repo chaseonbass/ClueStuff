@@ -11,12 +11,14 @@ import javax.swing.*;
 
 
 public class whoseTurnPanel extends JPanel{
-	private JTextField whose_turn;
-	public whoseTurnPanel(){
+	public JTextField whose_turn;
+	public whoseTurnPanel(String name){
+		// use parameter to set the text in the whose_turn
 		setLayout(new GridLayout(2,1));
 		JLabel turnLabel= new JLabel("                Whose Turn?");
 		whose_turn = new JTextField(10);
 		whose_turn.setFont(new Font("Time New Roman", Font.BOLD, 12));
+		whose_turn.setText(name);
 		add(turnLabel);
 		add(whose_turn);
 	}

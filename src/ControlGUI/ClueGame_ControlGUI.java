@@ -3,49 +3,48 @@ package ControlGUI;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.*;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicButtonListener;
+import cluePlayer.*;
 
 
 public class ClueGame_ControlGUI extends JPanel{
+	ClueGame cg;
 	
+	private int theRoll;
 	
-	public Component createNorthLayout(){
-		JPanel panel= new JPanel();
-		panel.setLayout(new GridLayout(1,3));
-		whoseTurnPanel wtPanel= new whoseTurnPanel();
-		panel.add(wtPanel);
-		buttonsPanel bPanel= new buttonsPanel();
-		panel.add(bPanel);
-		return panel;
-		
+	public whoseTurnPanel wtPanel;
+	public JButton nextPlayerButton;
+	public JButton accusationButton;
+	public DiePanel dPanel;
+	public GuessPanel gPanel;
+	public GuessResultPanel gResult;
+	
+	public void setRoll(int newRoll) {
+		theRoll = newRoll;
 	}
-	public Component createSouthLayout(){
-		JPanel panel= new JPanel();
-		panel.setLayout(new GridLayout(3,1));
-		DiePanel dPanel= new DiePanel();
-		panel.add(dPanel);
-		GuessPanel gPanel= new GuessPanel();
-		panel.add(gPanel);
-		GuessResultPanel gResult= new GuessResultPanel();
-		panel.add(gResult);
-		return panel;
-	}
-	public ClueGame_ControlGUI(){
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//setTitle ("Clue Game Control GUI");
-		//setSize (700,200);
+	
+	public ClueGame_ControlGUI(ClueGame cg){
+		this.cg = cg;
 		
+		theRoll = cg.getRoll();
+
 		setLayout(new GridLayout(2,3));
 		
-		whoseTurnPanel wtPanel= new whoseTurnPanel();
+		wtPanel= new whoseTurnPanel(cg.getCurrentPlayer().getName());
 		//buttonsPanel bPanel= new buttonsPanel();
 		//JPanel blankPanel = new JPanel();
-		JButton nextPlayerButton = new JButton("Next Player");
-		JButton accusationButton = new JButton("Make Accusation");
-		DiePanel dPanel= new DiePanel();
-		GuessPanel gPanel= new GuessPanel();
-		GuessResultPanel gResult= new GuessResultPanel();
+		nextPlayerButton = new JButton("Next Player");
+		nextPlayerButton.addActionListener(new ButtonListener());
+		accusationButton = new JButton("Make Accusation");
+		accusationButton.addActionListener(new ButtonListener());
+		dPanel= new DiePanel(theRoll);
+		gPanel= new GuessPanel();
+		gResult= new GuessResultPanel();
 		
 		add(wtPanel);
 		add(nextPlayerButton);
@@ -61,10 +60,19 @@ public class ClueGame_ControlGUI extends JPanel{
 		
 		
 	}
-	public static void main(String[] args) {
+	private class ButtonListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			cg.move();
+			System.out.println("Button pressed");
+			
+		}
+	}
+	/*public static void main(String[] args) {
 		ClueGame_ControlGUI gui= new ClueGame_ControlGUI();
 		
 		gui.setVisible(true);
-	}
+	}*/
 
 }

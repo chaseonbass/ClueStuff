@@ -1,3 +1,4 @@
+
 package cluePlayer;
 
 import java.awt.Color;
@@ -15,10 +16,11 @@ import clueGame.Board;
 public class Player implements Comparable {
 	private Map <String, Card> cards;
 	private String name, color;
-	private Color c;
+	private Color c;  
+	protected boolean mustFinish;
 	protected int index, row, column;
 	Board board;
-	
+
 	public Card disproveSuggestion(String person, String room, String weapon){
 		ArrayList <Card> match= new ArrayList<Card>();
 
@@ -31,12 +33,9 @@ public class Player implements Comparable {
 		if(match.size() >= 1){
 			int next= new Random().nextInt(match.size());
 			return match.get(next);
-			
-		}
-		
-		return null;
 
-		//		return new Card();
+		}
+		return null;
 	}
 	public Player(){
 		cards = new HashMap<String , Card>();
@@ -61,14 +60,16 @@ public class Player implements Comparable {
 		this.row = row;
 		this.column = column;
 		this.board = board;
+		index = board.calcIndex(row, column);
 		c = convertColor(color);
+		mustFinish = true;
 		cards = new HashMap<String , Card>();
 	}
 
 	public String getName(){
 		return name;
 	}
-	
+
 	public void setRow(int row) {
 		this.row = row;
 	}
@@ -103,13 +104,17 @@ public class Player implements Comparable {
 		}
 		return 0;
 	}
-	public void draw(Graphics g, Board b){
-		g.setColor(convertColor(color));
-		g.fillOval(column*b.getBlockSize(), row*b.getBlockSize(), b.getBlockSize(), b.getBlockSize());
-		
+	public void setMustFinish(Boolean b){
+		mustFinish = b;
+	}
+	public boolean getMustFinish(){
+		return mustFinish;
 	}
 
+	public void draw(Graphics g, Board b){
+		g.setColor(c); 
+		g.fillOval(column*b.getBlockSize(), row*b.getBlockSize(), b.getBlockSize(), b.getBlockSize());
 
-	
-	
+	}
 }
+
