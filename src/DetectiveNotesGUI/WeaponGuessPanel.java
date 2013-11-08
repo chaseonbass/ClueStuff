@@ -9,7 +9,7 @@ import javax.swing.border.TitledBorder;
 import cluePlayer.Card;
 import cluePlayer.Card.CardType;
 public class WeaponGuessPanel extends JPanel{
-	private JComboBox gWeapon;
+	public JComboBox gWeapon;
 	private Map<String, Card> cards;
 	public WeaponGuessPanel(Map <String, Card> cards){
 		this.cards = cards;

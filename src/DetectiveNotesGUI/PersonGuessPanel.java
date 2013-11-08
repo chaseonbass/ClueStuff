@@ -11,7 +11,7 @@ import cluePlayer.Card.CardType;
 
 
 public class PersonGuessPanel extends JPanel{
-	private JComboBox gPerson;
+	public JComboBox gPerson;
 	private Map<String, Card> cards;
 	public PersonGuessPanel(Map <String, Card> cards){
 		this.cards = cards;

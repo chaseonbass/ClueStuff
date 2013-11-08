@@ -53,19 +53,12 @@ public class ClueGame_ControlGUI extends JPanel{
 		add(gPanel);
 		add(gResult);
 		
-		
-		//add(createNorthLayout(), BorderLayout.NORTH);
-		//add(createSouthLayout(), BorderLayout.SOUTH);
-		
-		
-		
 	}
 	private class NextPlayerButtonListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
 			cg.move();
-			//System.out.println("Button pressed");
 			
 		}
 	}
@@ -75,7 +68,6 @@ public class ClueGame_ControlGUI extends JPanel{
 		public void actionPerformed(ActionEvent e)
 		{
 			// do other stuff, like accusing
-			//System.out.println("Button pressed");
 			
 		}
 	}

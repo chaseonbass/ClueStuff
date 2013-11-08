@@ -345,9 +345,9 @@ public class ClueGame extends JFrame {
 		}
 		else{
 			currentPlayer.setMustFinish(true);
-			currentPlayer = nextPlayer;  // this is messing things up a bit
+			currentPlayer = nextPlayer;  
 			// need to SET currentPlayer to nextPlayer not set the player currentPlayer is pointing to to nextPlayer
-			//System.out.println(currentPlayer.getName());
+			
 			pickNextPlayer(currentPlayer);
 			roll();
 			controlGUI.dPanel.displayRoll.setText(Integer.toString(roll));
@@ -360,18 +360,36 @@ public class ClueGame extends JFrame {
 			// make board show targets
 			if(currentPlayer.getName().equals(hplayer.getName())){
 				((HumanPlayer) currentPlayer).makeMove();
+				
+				if (board.getCells().get(currentPlayer.getIndex()) instanceof RoomCell) {
+					Suggestion tempSug = ; // needs to be pulled from dialog
+					Card tempCard = handleSuggestion(// stuff that was pulled from dialog);
+				
+				// Use tempCard & tempSug to update panels
+					controlGUI.gPanel.theGuess.setText(tempSug.toString());
+					controlGUI.gResult.displayResult.setText(tempCard.getName());
+				} else {
+					controlGUI.gPanel.theGuess.setText("(No Guess)");
+					controlGUI.gResult.displayResult.setText(null);
+				}
+				
 			}
 			else{
 				// computer player pick and move to target
 				((ComputerPlayer) currentPlayer).makeMove();
-				
-				// (String person, String room, String weapon, Player accusingPerson){
-				Suggestion tempSug = ((ComputerPlayer) currentPlayer).createSuggestion(seenCards, cards, board.getRooms());
-				Card tempCard = handleSuggestion(tempSug.getPerson(),tempSug.getRoom(),tempSug.getWeapon(), currentPlayer);
+
+				// if in a room
+				if (board.getCells().get(currentPlayer.getIndex()) instanceof RoomCell) {
+					Suggestion tempSug = ((ComputerPlayer) currentPlayer).createSuggestion(seenCards, cards, board.getRooms());
+					Card tempCard = handleSuggestion(tempSug.getPerson(),tempSug.getRoom(),tempSug.getWeapon(), currentPlayer);
 				
 				// Use tempCard & tempSug to update panels
-				controlGUI.gPanel.theGuess.setText(tempSug.toString());
-				controlGUI.gResult.displayResult.setText(tempCard.getName());
+					controlGUI.gPanel.theGuess.setText(tempSug.toString());
+					controlGUI.gResult.displayResult.setText(tempCard.getName());
+				} else {
+					controlGUI.gPanel.theGuess.setText("(No Guess)");
+					controlGUI.gResult.displayResult.setText(null);
+				}
 			}
 		}
 	}

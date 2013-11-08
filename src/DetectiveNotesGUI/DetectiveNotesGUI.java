@@ -43,18 +43,12 @@ public class DetectiveNotesGUI extends JDialog{
 	public DetectiveNotesGUI(Map <String, Card> cards){
 		this.cards = cards;
 		setSize(new Dimension(600,600));
-		setTitle("Defective Notes");
+		setTitle("Detective Notes");
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		add(createNorthLayout(), BorderLayout.NORTH);
 		add(createCenterLayout(), BorderLayout.CENTER);
 		add(createSouthLayout(), BorderLayout.SOUTH);
 		
 	}
-
-	/*public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		DetectiveNotesGUI gui= new DetectiveNotesGUI(cards);
-		gui.setVisible(false);
-	}*/
 
 }

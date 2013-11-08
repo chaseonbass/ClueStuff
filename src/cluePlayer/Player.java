@@ -80,7 +80,7 @@ public class Player implements Comparable {
 		return color;
 	}
 	public int getIndex(){
-		return index;
+		return board.calcIndex(row, column);
 	}
 	public int getRow(){
 		return row;
