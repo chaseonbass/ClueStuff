@@ -434,8 +434,9 @@ public class Board extends JPanel implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		if(game.getCurrentPlayer().getName().equals(game.getHumanPlayer().getName()) 
 				&& game.getCurrentPlayer().getMustFinish()){
-			//System.out.println("MousePressed!---------------------------");
+			
 			boolean valid = false;
+			boolean suggest = false;
 			ArrayList <BoardCell> targs = new ArrayList <BoardCell>();
 			targs.addAll(targets);
 			BoardCell clicked = new Walkway(0,0);
@@ -443,10 +444,18 @@ public class Board extends JPanel implements MouseListener {
 				if(targs.get(i).containsClick(e.getX(), e.getY(), game.board)){
 					valid = true;
 					clicked = targs.get(i);
+					if (clicked instanceof RoomCell)
+						suggest = true;
+					System.out.println(suggest); // I don't think I understand how Modality works...
 				}
 			}
 			if(valid){
-				//System.out.println("is valid!!");
+				
+				if (suggest) {
+					game.makeDialog();
+					suggest = false;
+				}
+				
 				unHighlightTargets();
 				game.getCurrentPlayer().setColumn(clicked.getCol());
 				game.getCurrentPlayer().setRow(clicked.getRow());

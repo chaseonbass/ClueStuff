@@ -22,6 +22,7 @@ import java.util.Set;
 
 import javax.swing.*;
 
+import makeGuessDialog.MakeGuessDialog;
 import playerCards.PlayerCardsPanel;
 import ControlGUI.ClueGame_ControlGUI;
 import DetectiveNotesGUI.DetectiveNotesGUI;
@@ -115,15 +116,16 @@ public class ClueGame extends JFrame {
 
 		seenCards = new HashSet<Card>();
 
-		// First Move
-		//currentPlayer = players.get("Batman");
+		// ----------------First Move--------------------------
 		pickNextPlayer(currentPlayer);
 	
 		board.startTargets(currentPlayer.getRow(), currentPlayer.getColumn(), roll);
 		board.highlightTargets();
 		board.repaint();
-		//System.out.println(board.getTargets().size());
+	
 		((HumanPlayer)currentPlayer).makeMove();
+		
+		makeDialog();
 	}
 
 	private HumanPlayer hplayer;
@@ -337,6 +339,22 @@ public class ClueGame extends JFrame {
 		roll = rand.nextInt(6)+1;
 		
 	}
+	
+	public void makeDialog() {
+		if (board.getCells().get(currentPlayer.getIndex()) instanceof RoomCell) {
+			MakeGuessDialog msd = new MakeGuessDialog(cards,this, (HumanPlayer) currentPlayer, board);
+			msd.setModal(true);
+			Suggestion tempSug = msd.returnSuggestion();
+			Card tempCard = handleSuggestion(tempSug.getPerson(),tempSug.getRoom(),tempSug.getWeapon(), currentPlayer);
+			
+			// Use tempCard & tempSug to update panels
+			controlGUI.gPanel.theGuess.setText(tempSug.toString());
+			controlGUI.gResult.displayResult.setText(tempCard.getName());
+		} else {
+			controlGUI.gPanel.theGuess.setText("(No Guess)");
+			controlGUI.gResult.displayResult.setText(null);
+		}
+	}
 
 	public void move(){
 		if(currentPlayer.getName().equals(hplayer.getName()) && currentPlayer.getMustFinish()){
@@ -361,17 +379,7 @@ public class ClueGame extends JFrame {
 			if(currentPlayer.getName().equals(hplayer.getName())){
 				((HumanPlayer) currentPlayer).makeMove();
 				
-				if (board.getCells().get(currentPlayer.getIndex()) instanceof RoomCell) {
-					Suggestion tempSug = ; // needs to be pulled from dialog
-					Card tempCard = handleSuggestion(// stuff that was pulled from dialog);
-				
-				// Use tempCard & tempSug to update panels
-					controlGUI.gPanel.theGuess.setText(tempSug.toString());
-					controlGUI.gResult.displayResult.setText(tempCard.getName());
-				} else {
-					controlGUI.gPanel.theGuess.setText("(No Guess)");
-					controlGUI.gResult.displayResult.setText(null);
-				}
+				// makeDialog();
 				
 			}
 			else{
@@ -383,7 +391,7 @@ public class ClueGame extends JFrame {
 					Suggestion tempSug = ((ComputerPlayer) currentPlayer).createSuggestion(seenCards, cards, board.getRooms());
 					Card tempCard = handleSuggestion(tempSug.getPerson(),tempSug.getRoom(),tempSug.getWeapon(), currentPlayer);
 				
-				// Use tempCard & tempSug to update panels
+					// Use tempCard & tempSug to update panels
 					controlGUI.gPanel.theGuess.setText(tempSug.toString());
 					controlGUI.gResult.displayResult.setText(tempCard.getName());
 				} else {
