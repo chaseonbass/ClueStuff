@@ -35,7 +35,7 @@ import cluePlayer.Card.CardType;
 public class ClueGame extends JFrame {
 	private Set<Card> seenCards;
 	public Map<String, Player> players;
-	public Map <String, Card> cards;
+	public Map<String, Card> cards;
 	private Solution solution;
 	public Board board;
 
@@ -332,6 +332,8 @@ public class ClueGame extends JFrame {
 	private Player currentPlayer;
 	private Player nextPlayer;
 	private int roll;
+	private String accusedPlayer;
+	private String accusedRoom;
 
 	public void roll(){
 		Random rand = new Random();
@@ -344,12 +346,31 @@ public class ClueGame extends JFrame {
 		MakeGuessDialog msd = new MakeGuessDialog(cards,this, (HumanPlayer) currentPlayer, board);
 		Suggestion tempSug = msd.returnSuggestion();
 		Card tempCard = handleSuggestion(tempSug.getPerson(),tempSug.getRoom(),tempSug.getWeapon(), currentPlayer);
+		
+		accusedPlayer = tempSug.getPerson();
+		accusedRoom = tempSug.getRoom();
 
 		// Use tempCard & tempSug to update panels
 		controlGUI.gPanel.theGuess.setText(tempSug.toString());
-		controlGUI.gResult.displayResult.setText(tempCard.getName());
+		if (tempCard.getName() != null)
+			controlGUI.gResult.displayResult.setText(tempCard.getName());
+		else 
+			controlGUI.gResult.displayResult.setText("No New Clue...");
 		board.validate();
 
+	}
+	
+	public void moveAccused() {
+		
+		for (String p : players.keySet())
+			if (players.get(p).getName().equals(accusedPlayer)) {
+				ArrayList<RoomCell> doorwayLocations = board.findDoorwaysOf(accusedRoom);
+				Random rand = new Random(doorwayLocations.size());
+				int selection = rand.nextInt(doorwayLocations.size());
+				RoomCell newLocation = doorwayLocations.get(selection);
+				players.get(p).setColumn(newLocation.getCol());
+				players.get(p).setRow(newLocation.getRow());
+			}
 	}
 
 	public void move(){
@@ -386,10 +407,17 @@ public class ClueGame extends JFrame {
 				if (board.getCells().get(currentPlayer.getIndex()) instanceof RoomCell) {
 					Suggestion tempSug = ((ComputerPlayer) currentPlayer).createSuggestion(seenCards, cards, board.getRooms());
 					Card tempCard = handleSuggestion(tempSug.getPerson(),tempSug.getRoom(),tempSug.getWeapon(), currentPlayer);
+					
+					accusedPlayer = tempSug.getPerson();
+					accusedRoom = tempSug.getRoom();
 
 					// Use tempCard & tempSug to update panels
 					controlGUI.gPanel.theGuess.setText(tempSug.toString());
-					controlGUI.gResult.displayResult.setText(tempCard.getName());
+					if (tempCard.getName() != null)
+						controlGUI.gResult.displayResult.setText(tempCard.getName());
+					else 
+						controlGUI.gResult.displayResult.setText("No New Clue...");
+					
 				} else {
 					controlGUI.gPanel.theGuess.setText("(No Guess)");
 					controlGUI.gResult.displayResult.setText(null);

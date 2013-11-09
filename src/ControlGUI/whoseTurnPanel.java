@@ -19,6 +19,7 @@ public class whoseTurnPanel extends JPanel{
 		whose_turn = new JTextField(10);
 		whose_turn.setFont(new Font("Time New Roman", Font.BOLD, 12));
 		whose_turn.setText(name);
+		whose_turn.setEditable(false);
 		add(turnLabel);
 		add(whose_turn);
 	}

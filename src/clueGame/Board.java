@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
+
 import javax.swing.*;
 
 import cluePlayer.*;
@@ -426,6 +427,24 @@ public class Board extends JPanel implements MouseListener {
 	public int getBlockSize(){
 		return BLOCKSIZE;
 	}
+	
+	public ArrayList<RoomCell> findDoorwaysOf(String accusedRoom) {
+		ArrayList<RoomCell> tempRooms = new ArrayList<RoomCell>();
+		Character accusedRoomChar = null;
+		
+		for (Character room : rooms.keySet()) {
+			if (rooms.get(room).equals(accusedRoom))
+				accusedRoomChar = room;
+		}
+		
+		for (BoardCell b : cells) {
+			if (b instanceof RoomCell && accusedRoomChar == ((RoomCell) b).getRoomType())
+				if ( ((RoomCell) b).isDoorway() )
+					tempRooms.add((RoomCell) b);
+		}
+		
+		return tempRooms;
+	}
 
 	// -----------------------------------------------------------------
 	// Mouse Listener-------------------------------
@@ -457,6 +476,8 @@ public class Board extends JPanel implements MouseListener {
 				
 				if (suggest) {
 					game.makeDialog();
+					game.moveAccused();
+					
 					suggest = false;
 				}
 				
