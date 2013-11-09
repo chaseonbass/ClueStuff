@@ -31,14 +31,12 @@ public class MakeGuessDialog extends JDialog {
 	JButton cancelButton; 
 	
 	public MakeGuessDialog(Map <String, Card> cards, ClueGame cg, HumanPlayer p, Board board) {
-		System.out.println("The Dialog was made");
 		this.cg = cg;
 		this.p = p;
 		this.cards = cards;
 		setLayout(new GridLayout(4,2));
 		setSize(new Dimension(300,300));
 		setTitle("Make a Guess");
-		setVisible(true);
 		
 		char tempRoomChar = ((RoomCell) board.getCells().get(p.getIndex())).getRoomType();
 		
@@ -63,6 +61,9 @@ public class MakeGuessDialog extends JDialog {
 		
 		add(submitButton);
 		add(cancelButton);
+		
+		setModal(true);
+		setVisible(true);
 		
 	}
 	

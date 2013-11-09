@@ -451,14 +451,15 @@ public class Board extends JPanel implements MouseListener {
 			}
 			if(valid){
 				
+				unHighlightTargets();
+				game.getCurrentPlayer().setColumn(clicked.getCol());
+				game.getCurrentPlayer().setRow(clicked.getRow());
+				
 				if (suggest) {
 					game.makeDialog();
 					suggest = false;
 				}
 				
-				unHighlightTargets();
-				game.getCurrentPlayer().setColumn(clicked.getCol());
-				game.getCurrentPlayer().setRow(clicked.getRow());
 				game.getCurrentPlayer().setMustFinish(false);
 				repaint();
 				valid = false;

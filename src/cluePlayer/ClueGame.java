@@ -118,14 +118,13 @@ public class ClueGame extends JFrame {
 
 		// ----------------First Move--------------------------
 		pickNextPlayer(currentPlayer);
-	
+
 		board.startTargets(currentPlayer.getRow(), currentPlayer.getColumn(), roll);
 		board.highlightTargets();
 		board.repaint();
-	
+
 		((HumanPlayer)currentPlayer).makeMove();
 		
-		makeDialog();
 	}
 
 	private HumanPlayer hplayer;
@@ -135,11 +134,11 @@ public class ClueGame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle ("Clue Game");
 		setSize (700,200);
-		
+
 		add(board, BorderLayout.CENTER);
 		seenCards = new HashSet<Card>();
 	}
-	
+
 	public void addSeenCards(Card c){
 		seenCards.add(c);
 	}
@@ -153,13 +152,13 @@ public class ClueGame extends JFrame {
 		for(String playKey : players.keySet()){
 			aPlayers.add(players.get(playKey));
 		}
-		
+
 		for(String key : cards.keySet()){
 			aCards.add(cards.get(key));
 		}
-		
+
 		Collections.shuffle(aCards);
-		
+
 		for(int i = 0; i < aCards.size(); i++){
 			aPlayers.get((i)%aPlayers.size()).addCard(aCards.get(i));  
 		}
@@ -337,23 +336,20 @@ public class ClueGame extends JFrame {
 	public void roll(){
 		Random rand = new Random();
 		roll = rand.nextInt(6)+1;
-		
+
 	}
-	
+
 	public void makeDialog() {
-		if (board.getCells().get(currentPlayer.getIndex()) instanceof RoomCell) {
-			MakeGuessDialog msd = new MakeGuessDialog(cards,this, (HumanPlayer) currentPlayer, board);
-			msd.setModal(true);
-			Suggestion tempSug = msd.returnSuggestion();
-			Card tempCard = handleSuggestion(tempSug.getPerson(),tempSug.getRoom(),tempSug.getWeapon(), currentPlayer);
-			
-			// Use tempCard & tempSug to update panels
-			controlGUI.gPanel.theGuess.setText(tempSug.toString());
-			controlGUI.gResult.displayResult.setText(tempCard.getName());
-		} else {
-			controlGUI.gPanel.theGuess.setText("(No Guess)");
-			controlGUI.gResult.displayResult.setText(null);
-		}
+
+		MakeGuessDialog msd = new MakeGuessDialog(cards,this, (HumanPlayer) currentPlayer, board);
+		Suggestion tempSug = msd.returnSuggestion();
+		Card tempCard = handleSuggestion(tempSug.getPerson(),tempSug.getRoom(),tempSug.getWeapon(), currentPlayer);
+
+		// Use tempCard & tempSug to update panels
+		controlGUI.gPanel.theGuess.setText(tempSug.toString());
+		controlGUI.gResult.displayResult.setText(tempCard.getName());
+		board.validate();
+
 	}
 
 	public void move(){
@@ -365,22 +361,22 @@ public class ClueGame extends JFrame {
 			currentPlayer.setMustFinish(true);
 			currentPlayer = nextPlayer;  
 			// need to SET currentPlayer to nextPlayer not set the player currentPlayer is pointing to to nextPlayer
-			
+
 			pickNextPlayer(currentPlayer);
 			roll();
 			controlGUI.dPanel.displayRoll.setText(Integer.toString(roll));
 			controlGUI.wtPanel.whose_turn.setText(currentPlayer.getName());
-			
+
 			repaint();
-			
+
 			//Update control panel display
 			board.startTargets(currentPlayer.getRow(),currentPlayer.getColumn(), roll);
 			// make board show targets
 			if(currentPlayer.getName().equals(hplayer.getName())){
 				((HumanPlayer) currentPlayer).makeMove();
-				
+
 				// makeDialog();
-				
+
 			}
 			else{
 				// computer player pick and move to target
@@ -390,7 +386,7 @@ public class ClueGame extends JFrame {
 				if (board.getCells().get(currentPlayer.getIndex()) instanceof RoomCell) {
 					Suggestion tempSug = ((ComputerPlayer) currentPlayer).createSuggestion(seenCards, cards, board.getRooms());
 					Card tempCard = handleSuggestion(tempSug.getPerson(),tempSug.getRoom(),tempSug.getWeapon(), currentPlayer);
-				
+
 					// Use tempCard & tempSug to update panels
 					controlGUI.gPanel.theGuess.setText(tempSug.toString());
 					controlGUI.gResult.displayResult.setText(tempCard.getName());
