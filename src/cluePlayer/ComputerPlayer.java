@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+
 import clueGame.*;
 import cluePlayer.*;
 import cluePlayer.Card.CardType;
@@ -83,8 +84,29 @@ public class ComputerPlayer extends Player{
 		setRow(chosen.getRow());
 		board.repaint();
 
-		// space for handling suggestions..
 	}
+	
+	public void makeAccusation(Set<Card> seenCards, Map<String, Card> cards, ClueGame cg) {
+		
+		String tempRoom = null;
+		String tempPerson = null;
+		String tempWeapon = null;
+		
+		for (String c : cards.keySet()) {
+			if (!seenCards.contains(cards.get(c))) {
+				if (cards.get(c).getCartype().equals(Card.CardType.ROOM))
+					tempRoom = c;
+				else if (cards.get(c).getCartype().equals(Card.CardType.PERSON))
+					tempPerson = c;
+				else
+					tempWeapon = c;
+			}
+		}
+		
+		cg.compAccusationDialog(tempRoom, tempPerson, tempWeapon);
+		
+	}
+	
 	private void setIndex(int row, int column) {
 		board.calcIndex(row, column);
 

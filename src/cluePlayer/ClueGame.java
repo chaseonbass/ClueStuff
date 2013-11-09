@@ -35,6 +35,7 @@ import cluePlayer.Card.CardType;
 
 public class ClueGame extends JFrame {
 	private Set<Card> seenCards;
+	private int numCards;
 	public Map<String, Player> players;
 	public Map<String, Card> cards;
 	private Solution solution;
@@ -94,7 +95,7 @@ public class ClueGame extends JFrame {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle ("Clue Game");
-		setSize (board.getNumColumns()*board.getBlockSize()+EXTENTION+150, board.getNumRows()*board.getBlockSize()+EXTENTION);
+		setSize (board.getNumColumns()*board.getBlockSize()+EXTENTION+175, board.getNumRows()*board.getBlockSize()+EXTENTION);
 
 		//File menu
 		JMenuBar menuBar = new JMenuBar();
@@ -125,7 +126,7 @@ public class ClueGame extends JFrame {
 		board.repaint();
 
 		((HumanPlayer)currentPlayer).makeMove();
-		
+
 	}
 
 	private HumanPlayer hplayer;
@@ -159,15 +160,15 @@ public class ClueGame extends JFrame {
 		}
 
 		Collections.shuffle(aCards);
-		
+
 		boolean roomPicked = false;
 		boolean personPicked = false;
 		boolean weaponPicked = false;
-		
+
 		String solRoom = null;
 		String solPerson = null;
 		String solWeapon = null;
-		
+
 		// Set the solution
 		for (int i = 0; i < aCards.size()-2; i++) {
 			if (aCards.get(i).getCartype().equals(Card.CardType.ROOM)) {
@@ -184,9 +185,9 @@ public class ClueGame extends JFrame {
 				solWeapon = tempCard.getName();
 			}
 		}
-		
+
 		solution = new Solution(solPerson, solWeapon, solRoom);
-		
+
 		// Deal out the rest of the cards
 		for(int i = 0; i < aCards.size(); i++){
 			aPlayers.get((i)%aPlayers.size()).addCard(aCards.get(i));  
@@ -277,6 +278,7 @@ public class ClueGame extends JFrame {
 				cards.put(line[0], c);  // adds as a card
 				lineNumber ++;
 			}
+			numCards = cards.size();
 		}
 		catch(FileNotFoundException e){
 			System.out.println(e.getMessage());
@@ -303,7 +305,7 @@ public class ClueGame extends JFrame {
 
 
 	public boolean checkAccusation(String person, String weapon, String room){
-		
+
 		if (person.equals(solution.getPerson()) && weapon.equals(solution.getWeapon()) && room.equals(solution.getRoom())){
 			return true;
 		}
@@ -376,7 +378,7 @@ public class ClueGame extends JFrame {
 		MakeGuessDialog msd = new MakeGuessDialog(cards,this, (HumanPlayer) currentPlayer, board);
 		Suggestion tempSug = msd.returnSuggestion();
 		Card tempCard = handleSuggestion(tempSug.getPerson(),tempSug.getRoom(),tempSug.getWeapon(), currentPlayer);
-		
+
 		accusedPlayer = tempSug.getPerson();
 		accusedRoom = tempSug.getRoom();
 
@@ -389,9 +391,9 @@ public class ClueGame extends JFrame {
 		board.validate();
 
 	}
-	
+
 	public void moveAccused() {
-		
+
 		for (String p : players.keySet())
 			if (players.get(p).getName().equals(accusedPlayer)) {
 				ArrayList<RoomCell> doorwayLocations = board.findDoorwaysOf(accusedRoom);
@@ -402,9 +404,21 @@ public class ClueGame extends JFrame {
 				players.get(p).setRow(newLocation.getRow());
 			}
 	}
-	
+
 	public void accusationDialog() {
 		MakeAccusationDialog msd = new MakeAccusationDialog(cards,this, (HumanPlayer) currentPlayer, board);
+	}
+	
+	public void compAccusationDialog(String tempRoom, String tempPerson, String tempWeapon) {
+		if (checkAccusation(tempPerson, tempWeapon, tempRoom)) {
+			JOptionPane.showMessageDialog(null, "Computer has won, it was the " + tempPerson + " with the " + tempWeapon + 
+					" in the " + tempRoom, "Accusation Made. You Lose", JOptionPane.INFORMATION_MESSAGE);
+			System.exit(0);
+		} else {
+			JOptionPane.showMessageDialog(null, "Computer guessed it was the " + tempPerson + " with the " + tempWeapon + 
+					" in the " + tempRoom + ".\n They were wrong.", "Accusation Made", JOptionPane.INFORMATION_MESSAGE);
+		}
+			
 	}
 
 	public void move(){
@@ -434,28 +448,33 @@ public class ClueGame extends JFrame {
 
 			}
 			else{
-				// computer player pick and move to target
-				((ComputerPlayer) currentPlayer).makeMove();
+				if (numCards == seenCards.size()+3)
+					((ComputerPlayer) currentPlayer).makeAccusation(seenCards, cards, this);
+				else {
+					// computer player pick and move to target
+					((ComputerPlayer) currentPlayer).makeMove();
 
-				// if in a room
-				if (board.getCells().get(currentPlayer.getIndex()) instanceof RoomCell) {
-					Suggestion tempSug = ((ComputerPlayer) currentPlayer).createSuggestion(seenCards, cards, board.getRooms());
-					Card tempCard = handleSuggestion(tempSug.getPerson(),tempSug.getRoom(),tempSug.getWeapon(), currentPlayer);
-					
-					accusedPlayer = tempSug.getPerson();
-					accusedRoom = tempSug.getRoom();
+					// if in a room
+					if (board.getCells().get(currentPlayer.getIndex()) instanceof RoomCell) {
+						Suggestion tempSug = ((ComputerPlayer) currentPlayer).createSuggestion(seenCards, cards, board.getRooms());
+						Card tempCard = handleSuggestion(tempSug.getPerson(),tempSug.getRoom(),tempSug.getWeapon(), currentPlayer);
 
-					// Use tempCard & tempSug to update panels
-					controlGUI.gPanel.theGuess.setText(tempSug.toString());
-					if (null == tempCard.getName())
-						controlGUI.gResult.displayResult.setText("No New Clue...");
-					else 
-						controlGUI.gResult.displayResult.setText(tempCard.getName());
-					
-				} else {
-					controlGUI.gPanel.theGuess.setText("(No Guess)");
-					controlGUI.gResult.displayResult.setText(null);
+						accusedPlayer = tempSug.getPerson();
+						accusedRoom = tempSug.getRoom();
+
+						// Use tempCard & tempSug to update panels
+						controlGUI.gPanel.theGuess.setText(tempSug.toString());
+						if (tempCard != null)
+							controlGUI.gResult.displayResult.setText(tempCard.getName());
+						else 
+							controlGUI.gResult.displayResult.setText("No New Clue...");
+
+					} else {
+						controlGUI.gPanel.theGuess.setText("(No Guess)");
+						controlGUI.gResult.displayResult.setText(null);
+					}
 				}
+				moveAccused();
 			}
 		}
 	}
