@@ -9,6 +9,7 @@ import java.awt.*;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonListener;
+
 import cluePlayer.*;
 
 
@@ -67,7 +68,14 @@ public class ClueGame_ControlGUI extends JPanel{
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			// do other stuff, like accusing
+			if (cg.getCurrentPlayer() instanceof HumanPlayer && cg.getCurrentPlayer().getMustFinish()) {
+				cg.accusationDialog();
+				if (cg.getCurrentPlayer().getMustFinish() == false)
+					cg.board.unHighlightTargets();
+			} else {
+				JOptionPane.showMessageDialog(null, "It's not your turn! Be patient... You can make an accusation then.", "Wait...", 
+						JOptionPane.INFORMATION_MESSAGE);
+			}
 			
 		}
 	}

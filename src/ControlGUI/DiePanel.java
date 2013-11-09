@@ -16,6 +16,7 @@ public class DiePanel extends JPanel{
 		
 		JLabel roll = new JLabel ("Roll");
 		displayRoll = new JTextField(10);
+		displayRoll.setEditable(false);
 		displayRoll.setText(Integer.toString(rollC));
 		add(roll);
 		add(displayRoll);

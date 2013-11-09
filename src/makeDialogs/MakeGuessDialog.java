@@ -1,4 +1,4 @@
-package makeGuessDialog;
+package makeDialogs;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

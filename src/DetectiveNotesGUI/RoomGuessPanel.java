@@ -9,7 +9,7 @@ import javax.swing.border.TitledBorder;
 import cluePlayer.Card;
 import cluePlayer.Card.CardType;
 public class RoomGuessPanel extends JPanel{
-	private JComboBox gRoom;
+	public JComboBox gRoom;
 	private Map <String, Card> cards;
 	public RoomGuessPanel(Map <String, Card> cards){
 		this.cards = cards;

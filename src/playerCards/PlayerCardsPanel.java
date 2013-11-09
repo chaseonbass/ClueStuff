@@ -31,8 +31,11 @@ public class PlayerCardsPanel extends JPanel {
 			setBorder(new TitledBorder (new EtchedBorder(), "People"));
 			setLayout(new GridLayout(3,1));
 			for (String c : cards.keySet()) 
-				if (cards.get(c).getCartype().equals(Card.CardType.PERSON)) 
-					add(new JTextField(c,10));
+				if (cards.get(c).getCartype().equals(Card.CardType.PERSON)) {
+					JTextField temp = new JTextField(c,10);
+					temp.setEditable(false);
+					add(temp);
+				}
 		}
 	}
 	
@@ -41,8 +44,11 @@ public class PlayerCardsPanel extends JPanel {
 			setBorder(new TitledBorder (new EtchedBorder(), "Rooms"));
 			setLayout(new GridLayout(3,1));
 			for (String c : cards.keySet()) 
-				if (cards.get(c).getCartype().equals(Card.CardType.ROOM)) 
-					add(new JTextField(c,10));
+				if (cards.get(c).getCartype().equals(Card.CardType.ROOM)) {
+					JTextField temp = new JTextField(c,10);
+					temp.setEditable(false);
+					add(temp);
+				}
 		}
 	}
 	
@@ -51,8 +57,11 @@ public class PlayerCardsPanel extends JPanel {
 			setBorder(new TitledBorder (new EtchedBorder(), "Weapons"));
 			setLayout(new GridLayout(3,1));
 			for (String c : cards.keySet()) 
-				if (cards.get(c).getCartype().equals(Card.CardType.WEAPON))
-					add(new JTextField(c,10));
+				if (cards.get(c).getCartype().equals(Card.CardType.WEAPON)) {
+					JTextField temp = new JTextField(c,10);
+					temp.setEditable(false);
+					add(temp);
+				}
 		}
 	}
 }
